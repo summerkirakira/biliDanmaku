@@ -896,11 +896,13 @@ def main():
                     cid = int(file.name.split('[cid')[1].split(']')[0].strip()[1:])
                     if file.suffix in ['.mp4', '.flv', '.mkv', '.avi']:
                         print(file.absolute())
-                        width, height = get_video_width_height(file)
-                        if width is None or height is None:
+                        try:
+                            width, height = get_video_width_height(file)
+                        except TypeError as e:
+                            print(e)
                             continue
                         generate_ass(get_danmaku_xml(cid), f"{file}.zh-CN.ass", width, height)
-                        logging.info(f"Generated {file}.zh-CN.ass")
+                        print(f"Generated {file}.zh-CN.ass")
         time.sleep(10)
 
 
