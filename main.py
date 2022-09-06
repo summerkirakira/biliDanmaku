@@ -868,10 +868,21 @@ def get_danmaku_xml(cid: int) -> str:
 
 
 def generate_ass(xml: str, output: str, width: int, height: int):
+    global fontsize
     with open(f"{output}.temp", 'w', encoding='utf-8') as f:
         f.write(xml)
-    Danmaku2ASS(f"{output}.temp", format, output, width, height, protect, font, fontsize, alpha, duration_marquee, duration_still, filter, filter_file, reduce)
-    os.remove(f"{output}.temp")
+    if width < 1920:
+        fontsize = 25
+    elif width < 3840:
+        fontsize = 50
+    else:
+        fontsize = 80
+    try:
+        Danmaku2ASS(f"{output}.temp", format, output, width, height, protect, font, fontsize, alpha, duration_marquee, duration_still, filter, filter_file, reduce)
+        os.remove(f"{output}.temp")
+    except Exception as e:
+        print(e)
+        sys.exit(1)
 
 
 def get_video_width_height(path: Path) -> (int, int):
